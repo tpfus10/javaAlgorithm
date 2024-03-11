@@ -11,10 +11,11 @@ public class Train03 {
 
 	//중복이 있는 요소를 제거
 	public static String[] removeElement1(String[] arr, String item) {// (11+)
-		ArrayList<String> list = (ArrayList<String>)Arrays.asList(arr);
+		//배열을 리스트로 다시 변환해서 list.remove();
+		//삭제된 리스트를 다시 배열로 변환
+		ArrayList<String> list = new ArrayList<>(Arrays.asList(arr));
 		list.remove(item);
-		String[] array = list.toArray(new String[list.size()]);
-		return array;
+		return list.toArray(String[]::new);//리스트와 배열은 길이가 자동으로 조정되지 않음
 			}
 	
 	    
@@ -53,20 +54,22 @@ public class Train03 {
 		//중복 여부 조사
 	    static String[] removeDuplicateList(List<String> list) {//(11)
 		    String cities[] = new String[0]; //cities 배열 생성
-		    cities = list.toArray(cities); //리스트를 배열로
+		    cities = list.toArray(cities); //리스트를 배열로 변환
 		    //리스트를 배열로 변환한 후 for문으로 도시가 중복이 있는 것을 체크 
 		    //compareTo 사용해서 removeElement 호출
 		    for(int i = 0; i<cities.length; i++) {
 		    	for(int j = i+1; j<cities.length; j++) {
 		    		if(cities[i].compareTo(cities[j]) == 0) {
-		    		removeElement1(cities, cities[j]);
-		    		}
+		    		cities = removeElement1(cities, cities[j]);//중복 제거를 위해 배열 전달하고 제거된 거 받으면 다시 저장해야 함
+		    		i--;//다음 반복에서 동일한 인덱스 i에 대해 다음 요소 (j+1)와 비교를 다시 시작하는 것을 의미
+		    		} 
 		    	}
-		    }	
+		    }
 		    return cities;
-	    }
+		  }	
+	   
 	    
-//------------------------------------------------------------------------------
+//----------------------------------------------------------------------------main
 	    
 		public static void main(String[] args) {
 			ArrayList<String> list = new ArrayList<>();//(1)

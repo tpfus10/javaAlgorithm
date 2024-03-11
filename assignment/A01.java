@@ -1,4 +1,4 @@
-//스트링 배열 정렬
+//2장 과제1: 스트링 배열 정렬
 package assignment;
 //String 배열 정렬 정수의 sortData를 사용할 수 없음, compareTo() 사용하기
 

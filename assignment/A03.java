@@ -1,9 +1,11 @@
-//스트링배열합병(mergeList)
+//3장 과제1: 스트링배열합병(mergeList) 
+//-> 이후에는 객체배열합병정렬 
 package assignment;
 
 /*
  * 함수(메소드)에 parameter 전달 방식을 표현하는 능력의 숙달 훈련
  * 함수(메소드) 전체를 작성하는 훈련 
+ * merge() 사용법 
  */
 import java.util.Arrays;
 import java.util.List;
@@ -12,15 +14,15 @@ public class A03 {
 
     }
     static String[] mergeList(String[]s1, String[] s2) {
-    	int i = 0, j = 0,k =0;
+    	int i = 0, j = 0, k =0;
     	String[] s3 = new String[10];
     	
-    	return s3;
+    	return s3;//함수의 리턴 타입이 배열
     }
     public static void main(String[] args) {
 	String[] s1 = { "홍길동", "강감찬", "을지문덕", "계백", "김유신" };
 	String[] s2 = {"독도", "울릉도", "한산도", "영도", "우도"};
-	Arrays.sort(s1);
+	Arrays.sort(s1); //comparable, comparator가 없음 > comparable의 compareTo() 사용
 	Arrays.sort(s2);
 	
 	showList("s1배열 = ", s1);

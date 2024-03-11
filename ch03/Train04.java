@@ -44,9 +44,30 @@ public class Train04 {
 
 	}
 	
-	static void sortData() {
-		// TODO Auto-generated method stub
+	//----------------------------------------------------------------------main
+	
+	private static void showList(String string, int[] datas) {
+		System.out.println(string);
+			for(int data : datas) {
+				System.out.println(data);
+			}
+	}
 
+	private static void inputData(int[] data) {
+		data[0] = 5;
+		data[1] = 7;
+		data[2] = 13;
+		data[3] = 15;
+		data[4] = 19;
+		data[5] = 31;
+		data[6] = 39;
+		data[7] = 58;
+		data[8] = 70;
+		data[9] = 95;
+	}
+
+	static void sortData() {
+		
 	}
 
 	static int linearSearch(int[] item, int key) {
