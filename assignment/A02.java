@@ -28,9 +28,6 @@ class PhyscData implements Comparable<PhyscData>{
 		 return this.name.compareTo(p.name); //왜 this.name??????
 	}
 
-	public int equals(PhyscData p) {
-		
-	}
 }
 
 public class A02 {

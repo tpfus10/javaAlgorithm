@@ -16,15 +16,21 @@ class PhyscData3 {
 		this.height = i;
 		this.vision = d;
 	}
+	
+	@Override
+	public String toString() {
+		return "PhyscData3{name=" + name + ", height=" + height + ", vision=" + vision + "}";
+	}
 }
 
 class CompName implements Comparator<PhyscData3> { //p125 2번
 	@Override
 	public int compare(PhyscData3 o1, PhyscData3 o2) {
-		if(o1.name.compareTo(o2.name) < 0) return 1;
-		else if (o1.name.compareTo(o2.name) > 0) return -1;
+		if(o1.name.compareTo(o2.name) > 0) return 1;
+		else if (o1.name.compareTo(o2.name) < 0) return -1;
 		else return 0;
 	}
+
 
 }
 
@@ -57,9 +63,11 @@ public class Train08 {
 		
 		showData("정렬전 객체 배열", data);
 		Arrays.sort(data, NAME_ORDER);
+		System.out.println();
 
 		showData("정렬후 객체 배열", data);
 		PhyscData3 key = new PhyscData3("길동", 167, 0.2);
+		System.out.println();
 
 		int idx1 = Arrays.binarySearch(data, key, NAME_ORDER);
 		int idx2 = Arrays.binarySearch(data, key, HEIGHT_ORDER);
@@ -68,7 +76,10 @@ public class Train08 {
 	}
 	
 	private static void showData(String string, PhyscData3[] data) {
-		// TODO Auto-generated method stub
+		System.out.println(string);
+		for(PhyscData3 obj : data) {
+			System.out.println(obj);
+		}
 		
 	}
 

@@ -38,30 +38,32 @@ public class Train03 {
 	    
 		static void sortList(List<String> list) {// (7)
 			// 방법1: list.sort(): Comparator 인터페이스를 구현해야 사용할 수 있음(A와 B단계 통해 구현됨)
-			// 방법2: list를 String 배열로 변환->array.sort()
-			class Comp implements Comparator<String> {//A: Comparator<String>인터페이스 구현
-				@Override
-				public int compare(String d1, String d2) {//B: compare() 메서드를 오버라이딩
-					// TODO Auto-generated method stub
-					return d1.compareTo(d2);
-				}
+			// 방법2: list를 String 배열로 변환->Arrays.sort()
+			String cities[] = new String[list.size()];
+			cities = list.toArray(cities);
+			Arrays.sort(cities);
+			for(int i = 0; i<cities.length; i++) {
+				list.set(i, cities[i]);
+				//list.set()은 list의 특정 인덱스 위치에 있는 요소를 새로운 값으로 변경하는 메서드임
+				//list.clear();//main의 list를 바꿔주기 - 단계1: list 비우기
+				//list.addAll(Arrays.asList(cities));//main의 list를 바꿔주기 - 단계2: list 채우기
 			}
-			
-			Comp cc = new Comp(); // comparator(정렬 기준을 가진 인터페이스)를 구현해야 그에 따라 sort를 할 수 있게 됨
-			list.sort(cc); //
-		}
+			} 
+		
 	    
+
 		//중복 여부 조사
 	    static String[] removeDuplicateList(List<String> list) {//(11)
 		    String cities[] = new String[0]; //cities 배열 생성
 		    cities = list.toArray(cities); //리스트를 배열로 변환
 		    //리스트를 배열로 변환한 후 for문으로 도시가 중복이 있는 것을 체크 
 		    //compareTo 사용해서 removeElement 호출
-		    for(int i = 0; i<cities.length; i++) {
-		    	for(int j = i+1; j<cities.length; j++) {
+		    int count = cities.length;
+		    for(int i = 0; i<count; i++) {
+		    	for(int j = i+1; j<count; j++) {
 		    		if(cities[i].compareTo(cities[j]) == 0) {
 		    		cities = removeElement1(cities, cities[j]);//중복 제거를 위해 배열 전달하고 제거된 거 받으면 다시 저장해야 함
-		    		i--;//다음 반복에서 동일한 인덱스 i에 대해 다음 요소 (j+1)와 비교를 다시 시작하는 것을 의미
+		    		count--;//다음 반복에서 동일한 인덱스 i에 대해 다음 요소 (j+1)와 비교를 다시 시작하는 것을 의미
 		    		} 
 		    	}
 		    }

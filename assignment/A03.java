@@ -30,7 +30,7 @@ public class A03 {
 
 	//감강찬 계백 김유신 독도 영도 우도 울릉도 을지문덕 한산도 홍길동 
 	//for() 말고 while() 사용하기(3개 써야 함)
-	String[] s3 = mergeList(s1,s2);
+	String[] s3 = mergeList(s1, s2);
 	showList("스트링 배열 s3 = s1 + s2:: ", s3);
 }
 }
