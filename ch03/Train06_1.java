@@ -57,12 +57,15 @@ public class Train06_1 {
 		do {
 			int pc = (pl+pr)/2;
 			if(data[pc].equals(key) == true) {
-				return pc;
-			} else {
-				pl = pc +1; 
-				pr = pc -1;
+				return 1;
 			}
-		} while (pl <= pr);
+			else if(data[pc].compareTo(key) > 0) {
+				pr = pc-1;
+			}
+			else {
+				pl = pc+1;
+			}
+		} while(pl <= pr);
 			return -1;
 	}
 	
@@ -75,6 +78,7 @@ public class Train06_1 {
 				return -1;
 			if(data[i].equals(key) == true) 
 				return i;
+				i++;
 		}
 	}
 	

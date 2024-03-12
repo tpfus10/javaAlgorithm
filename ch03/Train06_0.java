@@ -1,7 +1,7 @@
 //스트링배열정렬 이진탐색
 package ch03;
 
-//comparator 구현 실습
+//comparable 구현 실습
 /*
 * 교재 121 실습 3-6 
 * 함수(메소드)에 parameter 전달 방식을 표현하는 능력의 숙달 훈련
