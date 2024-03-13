@@ -14,6 +14,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 class Fruit4 {
+	@Override
+	public String toString() {
+		return  "Fruit4{name=" + name + ", price=" + price + ", expire=" + expire + "}";
+	}
+
 	String name;
 	int price;
 	String expire;
@@ -37,24 +42,62 @@ class Fruit4 {
 class FruitNameComparator2 implements Comparator<Fruit4> { //comparator 인터페이스를 구현한 클래스
 	public int compare(Fruit4 f1, Fruit4 f2) {//concrete class(객체 만들기 가능, 추상 클래스는 불가능)
 		//함수의 body->람다식의 함수본체
+		if(f1.name.compareTo(f2.name) > 0) return 1; //**여기로 가는 것
+		else if (f1.name.compareTo(f2.name) < 0) return -1;
+		else return 0;
+		}
 	}
 
 public class A04 {
-	private static void sortData(Fruit4[] arr, Comparator<Fruit4> cc_price) {
-
+	private static void sortData_n(Fruit4[] arr, Comparator<Fruit4> cc_name) {
+		for (int i = 0; i<arr.length; i++) {
+			for(int j = i+1; j<arr.length; j++) {
+				if(cc_name.compare(arr[i], arr[j]) > 0) {
+					swap(arr, i, j);
+				}
+			}
+		}
+	}
+	
+	private static void sortData_e(Fruit4[] arr, Comparator<Fruit4> cc_expire) {
+		for (int i = 0; i<arr.length; i++) {
+			for(int j = i+1; j<arr.length; j++) {
+				if(cc_expire.compare(arr[i], arr[j]) > 0) {
+					swap(arr, i, j);
+				}
+			}
+		}
 	}
 	
 	static void swap(Fruit4[]arr, int ind1, int ind2) {
-		Fruit4 temp = arr[ind1]; arr[ind1] = arr[ind2]; arr[ind2] = temp;
+		Fruit4 temp = arr[ind1]; 
+		arr[ind1] = arr[ind2]; 
+		arr[ind2] = temp;
 	}
 	
 	static void sortData(Fruit4 []arr, FruitNameComparator2 cc) {
 		for (int i = 0; i < arr.length; i++) {
 			for (int j = i+1; j < arr.length; j++)
-				if (cc.compare(arr[i],arr[j])> 0) swap(arr, i, j); //(FruitNameComparator2에 구현된) cc객체에는 compare 메소드만 있음
+				if (cc.compare(arr[i],arr[j]) > 0) //**여기에서
+					swap(arr, i, j); //(FruitNameComparator2에 구현된) cc객체에는 compare 메소드만 있음
 		}
 	}
 
+	private static void showData(String string, Fruit4[] arr) {
+		System.out.println(string);
+		for(Fruit4 item : arr) {
+			System.out.println(item);
+		}System.out.println();
+	}
+	
+	private static void reverse(Fruit4[] arr) {
+		for(int i = 0; i < arr.length/2; i++) {
+			swap(arr, i, arr.length-1-i);
+		}
+	}
+	
+//--------------------------------------------------------------------------------------------main
+	
 	public static void main(String[] args) {
 
 		Fruit4[] arr = {
@@ -69,16 +112,16 @@ public class A04 {
 		System.out.println("\n정렬전 객체 배열: ");
 		showData("정렬전 객체", arr);
 		
-		FruitNameComparator2 cc = new FruitNameComparator2();//cc 객체 생성
+		FruitNameComparator2 cc = new FruitNameComparator2();//cc 객체 생성(comparator로 정의한 정렬 기준)
 		
-		System.out.println("\n comparator cc 객체를 사용:: ");
-		Arrays.sort(arr, cc);
+		System.out.println("\ncomparator cc 객체를 사용:: ");
+		Arrays.sort(arr, cc); //기본적인 병합 정렬 알고리즘 사용(정렬 기준은 정의 가능, 알고리즘 변경은 불가능)
 		showData("Arrays.sort(arr, cc) 정렬 후", arr);
 		
 		reverse(arr);
 		showData("역순 재배치 후", arr);
 		
-		sortData(arr, cc);
+		sortData(arr, cc); //사용자 정의 정렬 알고리즘 구현
 		showData("sortData(arr,cc) 실행후", arr);
 		
 		// 람다식은 익명클래스 + 익명 객체이다(한 번 해보기, 나중에 다시 설명해줄 예정): 1~3 모두 동일
@@ -87,63 +130,65 @@ public class A04 {
 		                                                                     //-> 람다식의 함수본체를 compare 함수에 넣어서 객체를 만들어줌
 		Arrays.sort(arr, cc_price2); // 람다식으로 만들어진 객체를 사용 b)
 		showData("람다식 변수 cc_price2을 사용한 Arrays.sort(arr, cc) 정렬 후", arr); //c)
+		
 		//2)--------------------------------------------------------------------------------------------------
 		Arrays.sort(arr, (a, b) -> a.getPrice() - b.getPrice()); // Fruit4에 compareTo()가 있어도 람다식 우선 적용 a)+b)->comparator라는 단어도 없음
 		showData("람다식: (a, b) -> a.getPrice() - b.getPrice()을 사용한 Arrays.sort(arr, cc) 정렬 후", arr); //c)
+		
 		//3)-------------------------------------------------------------------------------------------------
-		System.out.println("\n익명클래스 객체로 정렬(가격)후 객체 배열: ");
 		Arrays.sort(arr, new Comparator<Fruit4>() {
 			@Override
 			public int compare(Fruit4 a1, Fruit4 a2) {
-				return a1.getName().compareTo(a2.getName()); //a) + b) + c)
+				return a1.getPrice()-a2.getPrice(); //a) + b) + c)
 			}
 		});
-		//----------------------------------------------------------------------------------------------------
+		showData("\n익명클래스 객체로 정렬(가격)후 객체 배열:", arr);
+//----------------------------------------------------------------------------------------------------
 		
-		System.out.println("\ncomparator 정렬(이름)후 객체 배열: ");
-		showData("comparator 객체를 사용한 정렬:", arr);
+		System.out.println("\ncomparator 정렬()후 객체 배열: ");
+		showData("comparator_n 객체를 사용한 정렬:", arr);
+		sortData_n(arr, cc);
+		
+		System.out.println();
+		showData("comparator_e 객체를 사용한 정렬:", arr);
+		sortData_e(arr, cc);
 	
 		Comparator<Fruit4> cc_name = new Comparator<Fruit4>() {// 익명클래스 사용
-
 			@Override
 			public int compare(Fruit4 f1, Fruit4 f2) {
-				// TODO Auto-generated method stub
 				return (f1.name.compareTo(f2.name));
 			}
-
 		};
+		
 		Comparator<Fruit4> cc_price = new Comparator<Fruit4>() {
-
 			@Override
 			public int compare(Fruit4 f1, Fruit4 f2) {
 				return f1.getPrice() - f2.getPrice();
 			}// 익명클래스 사용
-
 		};
 
-		Fruit4 newFruit4 = new Fruit4("수박", 880, "2023-5-18");
-		/*
-		 * 교재 115 Arrays.binarySearch에 의한 검색
-		 */
-		int result3Index = Arrays.binarySearch(arr, newFruit4, cc_name);
-		System.out.println("\nArrays.binarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);
-		
-		result3Index = binarySearch(arr, newFruit4, cc_name);
-		System.out.println("\nbinarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);
-
-		sortData(arr, cc_price);
-		System.out.println("\ncomparator 정렬(가격)후 객체 배열: ");
-		showData("comparator를 사용한 정렬후:", arr);
-		
-		result3Index = Arrays.binarySearch(arr, newFruit4, cc_price);
-		System.out.println("\nArrays.binarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);
-		
-		result3Index = binarySearch(arr, newFruit4, cc_price);
-		System.out.println("\nbinarySearch() 조회결과::" + result3Index);
+//		Fruit4 newFruit4 = new Fruit4("수박", 880, "2023-5-18");
+//		/*
+//		 * 교재 115 Arrays.binarySearch에 의한 검색
+//		 */
+//		int result3Index = Arrays.binarySearch(arr, newFruit4, cc_name);
+//		System.out.println("\nArrays.binarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);
+//		
+//		result3Index = binarySearch(arr, newFruit4, cc_name);
+//		System.out.println("\nbinarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);
+//
+//		sortData(arr, cc_price);
+//		System.out.println("\ncomparator 정렬(가격)후 객체 배열: ");
+//		showData("comparator를 사용한 정렬후:", arr);
+//		
+//		result3Index = Arrays.binarySearch(arr, newFruit4, cc_price);
+//		System.out.println("\nArrays.binarySearch([수박,880,2023-5-18]) 조회결과::" + result3Index);
+//		
+//		result3Index = binarySearch(arr, newFruit4, cc_price);
+//		System.out.println("\nbinarySearch() 조회결과::" + result3Index);
 
 		}
+
+
 	}
 
-
-
-} 

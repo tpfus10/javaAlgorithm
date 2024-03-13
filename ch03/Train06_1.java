@@ -30,23 +30,36 @@ class PhyscData2 implements Comparable<PhyscData2> {
 
 	@Override
 	public int compareTo(PhyscData2 p) {
-		return this.name.compareTo(p.name);
+//이름을 기준으로 할 때
+//		return this.name.compareTo(p.name);
+		
+//시력을 기준으로 할 때1
+		return (int)(vision - p.vision); //vision은 double이기 때문에 연산을 하려면 int로 타입캐스팅을 해줘야 함
+		
+//시력을 기준으로 할 때2
 //		if (vision > p.vision)
 //			return 1;
 //		else if (vision < p.vision)
 //			return -1;
+		
+//키를 기준으로 할 때1
+//		return (height - p.height);
+		
+//키를 기준으로 할 때2
 //		else if (height > p.height)
 //			return 1;
 //		else 
 //			return -1;
 	}
 
-	public boolean equals(PhyscData2 key) { //두 객체의 내용이 동일한지 비교하는 메서드
-		if (this == key)
-		return true;
-		else
-		return false;
-	}
+//	public boolean equals(PhyscData2 key) { //두 객체의 내용이 동일한지 비교하는 메서드
+//		if (this.name.compareTo(key.name)) //기준은 직접 정의하는 것
+//		if (this.name==key.name) //이렇게 하면 주소만 비교하게 됨(반환값이 T/F) 
+	                             //compareTo는 객체의 내용을 비교함(반환값이 음수, 0, 양수)
+//		return true;
+//		else
+//		return false;
+//	}
 }
 
 public class Train06_1 {
@@ -56,7 +69,7 @@ public class Train06_1 {
 		
 		do {
 			int pc = (pl+pr)/2;
-			if(data[pc].equals(key) == true) {
+			if(data[pc].compareTo(key) == 0) { //객체 비교에도 compareTo()를 사용할 수 있음
 				return 1;
 			}
 			else if(data[pc].compareTo(key) > 0) {
