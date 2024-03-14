@@ -1,9 +1,12 @@
-//실습4_4객체선형큐_배열
+ //실습4_4객체선형큐_배열(삭제시 데이터 이동을 해줘야 함)
 
 package ch04;
+import java.nio.channels.OverlappingFileLockException;
 //List를 사용한 선형 큐 구현  - 큐는 배열 사용한다 
 import java.util.Random;
 import java.util.Scanner;
+
+import ch04.IntStack3.EmptyIntStackException;
 
 /*
 * Queue of ArrayList of Point
@@ -38,21 +41,23 @@ class Point3 {
 	public void setY(int y) {
 		iy = y;
 	}
+	
 	@Override
 	public boolean equals(Object p) {
 		if ((this.ix == ((Point3)p).ix) && (this.iy == ((Point3)p).iy))
 			return true;
-		else return false;
+		else 
+			return false;
 	}
 }
 
 //int형 고정 길이 큐
 class objectQueue2 {
-  private Point3[] que;
-	private int capacity; // 큐의 크기
+  private Point3[] que; //참조변수
+	private int capacity; // 큐의 크기 - 배열의 length
 	private int front; // 맨 처음 요소 커서
 	private int rear; // 맨 끝 요소 커서
-	private int num; // 현재 데이터 개수
+//	private int num; // 현재 데이터 개수(이왕이면 쓰지 말기)
 
 //--- 실행시 예외: 큐가 비어있음 ---//
 
@@ -60,19 +65,31 @@ class objectQueue2 {
 //--- 실행시 예외: 큐가 가득 찼음 ---//
 
 
-//--- 생성자(constructor) ---//
-public objectQueue2(int maxlen) {
-
+//--- 생성자(constructor) ---// 초기값을 설정
+public objectQueue2(int maxlen) { //배열의 크기만 매개변수로 받음
+	front = rear = 0;
+	capacity = maxlen;
+	try {
+		que = new Point3[capacity];
+	} catch(OutOfMemoryError e) {
+		capacity = 0;
+	}
+	
 }
 
 //--- 큐에 데이터를 인큐 ---//
-	public int enque(Point3 x) throws OverflowQueueException {
-
+	public Point3 enque(Point3 x) throws OverflowQueueException {
+		if(rear > capacity) 
+			throw new OverflowQueueException();
+		que[rear++] = x;
+		return x;
 	}
 
 //--- 큐에서 데이터를 디큐 ---//
 	public Point3 deque() throws EmptyQueueException {
-
+		if(front <= 0) 
+			throw new EmptyQueueException();
+		
 	}
 
 //--- 큐에서 데이터를 피크(프런트 데이터를 들여다봄) ---//
@@ -94,28 +111,37 @@ public objectQueue2(int maxlen) {
 
 //--- 큐의 크기를 반환 ---//
 	public int getCapacity() {
-		return capacity;
+		return rear-front+1;
 	}
 
 //--- 큐에 쌓여 있는 데이터 개수를 반환 ---//
 	public int size() {
-		return num;
+		return rear-front;
 	}
 
 //--- 큐가 비어있는가? ---//
 	public boolean isEmpty() {
-		return num <= 0;
+		if(front == 0 && rear == 0)
+			return true;
+		else
+			return false;
 	}
 
 //--- 큐가 가득 찼는가? ---//
 	public boolean isFull() {
-		return num >= capacity;
+		if(front == capacity && rear == capacity) 
+			return true;
+		else 
+			return false;
 	}
 
 //--- 큐 안의 모든 데이터를 프런트 → 리어 순으로 출력 ---//
 
 }
-public class Train4 {
+
+//------------------------------------------------------------------------------------------------main
+
+public class Train4_1 {
 	public static void main(String[] args) {
 		Scanner stdIn = new Scanner(System.in);
 		objectQueue2 oq = new objectQueue2(4); // 최대 64개를 인큐할 수 있는 큐
