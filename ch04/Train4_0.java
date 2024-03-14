@@ -65,13 +65,14 @@ public Queue4(int maxlen) {
 		rear--;//리스트는 자동으로 데이터가 이동하기 때문에 front가 아니라 rear를 조절해줘야 함
 		return x;
 	}
-
+	
+//--- 큐 안의 모든 데이터를 프런트 → 리어 순으로 출력 ---//
 	public void dump() {
 		if(isEmpty()) {
 			throw new EmptyQueueException("Dump: queue empty");
 		}
 		else {
-			for(int i = 0; i < capacity; i++) {
+			for(int i = 0; i < size(); i++) { // i는 size보다 작아야 함(i는 인덱스, size는 개수/인덱스는 0부터 시작)
 				System.out.print(que.get(i) + " ");
 			}
 		}
@@ -100,9 +101,8 @@ public Queue4(int maxlen) {
 //--- 큐에서 x를 검색하여 인덱스(찾지 못하면 –1)를 반환 ---//
 	public int indexOf(int x) {
 		for (int i = 0; i < rear+1; i++) {
-			int idx = (i + front) % capacity; // 검색은 물리적인 첫 요소가 아니라 논리적인 첫 요소인 프런트에서 시작함
-			if (que.get(idx) == x) // 검색 성공
-				return idx;
+			if (que.get(i) == x) // 검색 성공
+				return i;
 		}
 		return -1; // 검색 실패
 	}
@@ -119,7 +119,7 @@ public Queue4(int maxlen) {
 
 //--- 큐가 비어있는가? ---//
 	public boolean isEmpty() {
-		if(front == 0 && rear == 0) 
+		if(front == 0 && rear == 0) //front == rear는 큐가 비어 있는지 확인할 때 사용됨(확실하게 0 추가)
 			return true;
 		else
 			return false;
@@ -127,7 +127,7 @@ public Queue4(int maxlen) {
 
 //--- 큐가 가득 찼는가? ---//
 	public boolean isFull() {
-		if(rear == capacity) //front == rear == capacity 이렇게 안 해도 됨
+		if(rear == capacity) //front == rear == capacity 이렇게 하면 안 됨
 			return true;
 		else
 			return false;
@@ -154,7 +154,7 @@ public class Train4_0 {
 				System.out.print("입력데이터: (" + rndx +")");
 				try {
 					oq.enque(rndx);
-				} catch(Queue4.OverflowQueueException e) {
+				} catch(Queue4.OverflowQueueException e) { //"Queue4"는 Over~ 객체 앞에 붙어 예외가 발생한 클래스를 나타냄
 					System.out.println("queue이 가득차있습니다." + e.getMessage());
 					e.printStackTrace();
 				}

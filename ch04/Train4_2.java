@@ -99,7 +99,7 @@ class IntQueue3 {
 //--- 큐에서 x를 검색하여 인덱스(찾지 못하면 –1)를 반환 ---//
 	public int indexOf(int x) {
 		for (int i = 0; i < size()+1; i++) {
-			int idx = (i + front) % capacity;
+			int idx = (i + front) % capacity; // 검색은 물리적인 첫 요소가 아니라 논리적인 첫 요소인 프런트에서 시작함
 			if (que[idx] == x) // 검색 성공
 				return idx;
 		}
