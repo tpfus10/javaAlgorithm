@@ -24,51 +24,71 @@ public class A05 {
 //file > string split() > 배열 > ArrayList > sort > iterator 사용하여 merge > 중복 제거 > string 배열 > file에 저장
 
 	/*
-	static int binSearch(String[] s, int n, String key) {
-		//자료구조 책 페이지 115 코드 사용한다.
-	}
-	*/
-	
+	 * static int binSearch(String[] s, int n, String key) { //자료구조 책 페이지 115 코드
+	 * 사용한다. }
+	 */
+
 	static ArrayList<String> removeDuplicate(ArrayList<String> al) {
 		/*
-		 * 구현할 부분 : 리스트에서 중복을 제거한다 - 배열로 변환하여 구현하는 것이 아님 
-		 * 리스트를 정렬한후에 이 함수가 호출된다
-		*/
+		 * 구현할 부분 : 리스트에서 중복을 제거한다 - 배열로 변환하여 구현하는 것이 아님 리스트를 정렬한후에 이 함수가 호출된다
+		 */
 		ArrayList<String> list1 = new ArrayList<>();
+		int count = al.size();
+		for (int i = 0; i < count; i++) {
+			for (int j = i + 1; j < count; j++) {
+				if (al.get(i).compareTo(al.get(j)) == 0) {
+					al.remove(j);
+					count--;
+				}
+			}
+		}
 		return list1;
 	}
 
 	static void trimSpace(String[] arr) {
-
+		String[] result = new String[arr.length];
+		int index = 0;
+		
+		for (String str : arr) {
+			if (str != null && !str.trim().isEmpty()) {
+				result[index++] = str;
+			}
+		}
 	}
 
 	static void makeList(String[] sarray1, List<String> list1) {
-
+		list1 = new ArrayList<>(Arrays.asList(sarray1));
 	}
 
 	static List<String> mergeList(List<String> list1, List<String> list2) {
 		/*
-		 * list3 = merge(list1, list2);으로서 새로운 리스트에 정렬 값 순서로 merge하는 알고리즘 구현 
+		 * list3 = merge(list1, list2);으로서 새로운 리스트에 정렬 값 순서로 merge하는 알고리즘 구현
 		 */
+		int i = 0, j = 0, k = 0;
 		ArrayList<String> list3 = new ArrayList<>();
 		// ------- ArrayList의 get()을 사용한 merge
-
+		while (i < list1.size() && j < list2.size()) {
+			if (list1.get(i).compareTo(list2.get(j)) < 0) {
+				list3.add(list1.get(i++));
+				k++;
+			} else {
+				list3.add(list2.get(j++));
+				k++;
+			}
+		}
+		return list3;
 	}
 
 	public static void main(String[] args) {
 		try {
 			/*
-			 * 자바 교재 547: 이클립스 > edu 프로젝트 - 마우스 우측 > New>File >a.txt 생성
-			 * 입력 데이터를 다음과 같이 만든다:
-			 *    서울,도쿄,북경,상해,서울,도쿄, 뉴욕,부산
-			 *        상해,도쿄
-			 *          서울, 도쿄
-			 * 자바 교재 580: Path 클래스 - 파이썬 유사 
+			 * 자바 교재 547: 이클립스 > edu 프로젝트 - 마우스 우측 > New>File >a.txt 생성 입력 데이터를 다음과 같이 만든다:
+			 * 서울,도쿄,북경,상해,서울,도쿄, 뉴욕,부산 상해,도쿄 서울, 도쿄 자바 교재 580: Path 클래스 - 파이썬 유사
 			 */
 			Path input1 = Paths.get("a1.txt");
 			byte[] bytes1 = Files.readAllBytes(input1);
-			//readAllBytes: 파일의 모든 바이트를 읽어오는 메서드입니다. 
-			//이 메서드는 파일을 열고 파일의 크기만큼 바이트를 읽어서 바이트 배열로 반환합니다.
+			// readAllBytes: 파일의 모든 바이트를 읽어오는 메서드입니다.
+			// 이 메서드는 파일을 열고 파일의 크기만큼 바이트를 읽어서 바이트 배열로 반환합니다.
 			Path input2 = Paths.get("a2.txt");
 			byte[] bytes2 = Files.readAllBytes(input2);
 
@@ -81,7 +101,7 @@ public class A05 {
 			showData("스트링 배열 sarray1", sarray1);
 			showData("스트링 배열 sarray2", sarray2);
 
-			//공백제거
+			// 공백제거
 			trimSpace(sarray1);
 			trimSpace(sarray2);
 
@@ -136,6 +156,21 @@ public class A05 {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private static void showList(String string, List<String> list3) {
+		System.out.println(string);
+		for (String lst : list3) {
+			System.out.print(lst + " ");
+		}
+	}
+
+	private static void showData(String string, String[] sarray1) {
+		System.out.println(string);
+		for (String a : sarray1) {
+			System.out.print(a + " ");
+		}
+		System.out.println();
 	}
 
 	static void writeFile(List<String> list3, ByteBuffer buffer) {
