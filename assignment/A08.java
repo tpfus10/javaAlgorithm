@@ -172,7 +172,7 @@ public class A08 {
 		st.push(p);// 스택에 현 위치 객체를 push
 
 		while (true) {
-			if (ix == d.length) {
+			if (st.isEmpty() && iy==8) {
 				break;
 			}
 			int newCol = nextMove(d, ix, iy);
@@ -206,7 +206,7 @@ public class A08 {
 	public static boolean checkDiagSW(int[][] d, int cx, int cy) { // x++, y-- or x--, y++ where 0<= x,y <= 7
 		int i = cx; // 기준점인 (cx, cy)에서 방향에 따라 검사
 		int j = cy;
-		while (i < d.length && j > 0) {
+		while (i < d.length && j >= 0) {
 			if (d[i][j] == 1) // 확인 먼저 하고 인덱스 값 조정하기
 				return false;
 			i++;
@@ -214,7 +214,7 @@ public class A08 {
 		}
 		int k = cy;
 		int q = cx;
-		while (k < d.length && q > 0) {
+		while (k < d.length && q >= 0) {
 			if (d[q][k] == 1)
 				return false;
 			k++;
@@ -304,7 +304,6 @@ public class A08 {
 				data[i][j] = 0;
 
 		EightQueen(data);
-		showQueens(data);
 
 	}
 }
