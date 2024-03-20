@@ -176,6 +176,15 @@ public class A08 {
 				break;
 			}
 			int newCol = nextMove(d, ix, iy);
+			if (newCol != -1) {
+				d[ix][newCol] = 1;
+				st.push(new Point(ix, newCol)); // 새로운 객체를 만들어서 넣어주기
+				count++;
+				ix++;
+				iy = 0;
+				if(count != 8) 
+				continue;
+			}
 			if (newCol == -1 || count == 8) {
 				if (count == 8) {
 					numberSolutions++;
@@ -188,14 +197,6 @@ public class A08 {
 				d[ix][iy] = 0;
 				count--;
 				iy++;
-				continue;
-			}
-			if (newCol != -1) {
-				d[ix][newCol] = 1;
-				st.push(new Point(ix, newCol)); // 새로운 객체를 만들어서 넣어주기
-				count++;
-				ix++;
-				iy = 0;
 				continue;
 			}
 		}
