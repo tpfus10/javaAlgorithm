@@ -71,7 +71,6 @@ class StackList {
 			throw new OverflowIntStackException("push: stack overflow");
 		data.add(p);
 		top++;
-		return;
 	}
 
 	// --- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
@@ -83,6 +82,7 @@ class StackList {
 
 	// --- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
 	public Items3 peek() throws EmptyIntStackException {
+//		System.out.println("피크");
 		if (top <= 0) // 스택이 빔
 			throw new EmptyIntStackException("peek: stack empty");
 		return data.get(top - 1);
@@ -150,7 +150,7 @@ public class TrainM {
 
 		while (!st.isEmpty()) // stack not empty
 		{
-			Items3 tmp = st.pop(); // unstack
+			Items3 tmp = st.pop(); // unstack 팝을 한 경우 이전 값으로 돌아가는 기능을 수행
 			int i = tmp.x;
 			int j = tmp.y;
 			int d = tmp.dir;
@@ -161,22 +161,31 @@ public class TrainM {
 				int g = i + moves[d].a;
 				int h = j + moves[d].b;
 				if ((maze[g][h] == 0) && (mark[g][h] == 0)) { // new position
-					i = g;
-					j = h;
-					mark[g][h] = 2;
-					st.push(tmp);
+					temp.x = g;
+					temp.y = h;
+					temp.dir = d;
+					st.push(temp);
+					d = 0;
+					break;
 				} else {
-					d++;
+               	 d++;
 				}
 				
-				if(d >= 8) {// backtracking 궤적은 1로 표시
-					mark[g][h] = 1;
-				}
-
-				if ((g == ix) && (h == iy)) { // reached exit
+				if (d>=8) {
+						mark[i][j] = 1; //g, h는 다음 위치
+						//st.pop(); //이전 위치에 대한 d값을 포인터가 가리킴
+						break;
+						//Items3 reset = st.peek();
+						//i = reset.x;
+						//j = reset.y;
+						//d = 0; 전에 탐색한 이후부터 탐색해도 상관 없음
+                 } 
+				
+				if((i == ix) && (j == iy)) { // reached exit
 					break;
 				}
 			}
+			// backtracking 궤적은 1로 표시
 			System.out.println("no path in maze");
 		}
 
@@ -198,12 +207,18 @@ public class TrainM {
 		int[][] mark = new int[14][17];
 
 		int input[][] = { // 12 x 15
-				{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 },
-				{ 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1 }, { 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0 },
-				{ 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 },
-				{ 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 }, { 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
-				{ 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 }, { 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0 },
-				{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0 }, { 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0 } };
+				{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1 }, 
+				{ 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 },
+				{ 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1 }, 
+				{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0 },
+				{ 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1 }, 
+				{ 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 },
+				{ 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 }, 
+				{ 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 }, 
+				{ 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0 },
+				{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0 }, 
+				{ 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0 } };
 
 		for (int ia = 0; ia < 8; ia++)
 			moves[ia] = new Offsets3(0, 0);// 배열에 offsets 객체를 치환해야 한다.
@@ -236,14 +251,14 @@ public class TrainM {
 			}
 		}
 
-		System.out.println("maze[12,15]::");
+		System.out.println("maze[13,16]::");
 		showMatrix(maze, 13, 16);
 
 //		System.out.println("mark::");
 //		showMatrix(mark, 13, 16);
 
-		path(maze, mark, 12, 15);
+		path(maze, mark, 13, 16);
 		System.out.println("mark::");
-		showMatrix(mark, 12, 15);
+		showMatrix(mark, 13, 16);
 	}
 }
