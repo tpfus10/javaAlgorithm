@@ -144,7 +144,7 @@ public class TrainM {
 		Items3 temp = new Items3(0, 0, 0);// N :: 0
 		temp.x = 1;
 		temp.y = 1;
-		temp.dir = 0;// E:: 2
+		temp.dir = 2;// E:: 2
 		mark[temp.x][temp.y] = 2;// 미로 찾기 궤적은 2로 표시
 		st.push(temp);
 
@@ -154,38 +154,27 @@ public class TrainM {
 			int i = tmp.x;
 			int j = tmp.y;
 			int d = tmp.dir;
-			mark[i][j] = 2;
+			mark[i][j] = 1; // backtracking 궤적은 1로 표시
 
-			while (d < 8 ) // moves forward
+			while (d < 8) // moves forward
 			{
 				int g = i + moves[d].a;
 				int h = j + moves[d].b;
 				if ((maze[g][h] == 0) && (mark[g][h] == 0)) { // new position
-					temp.x = g;
-					temp.y = h;
-					temp.dir = d;
-					st.push(temp);
+					i = g;
+					j = h;
+					st.push(new Items3(i, j, d));
 					d = 0;
 					break;
 				} else {
                	 d++;
 				}
 				
-				if (d>=8) {
-						mark[i][j] = 1; //g, h는 다음 위치
-						//st.pop(); //이전 위치에 대한 d값을 포인터가 가리킴
-						break;
-						//Items3 reset = st.peek();
-						//i = reset.x;
-						//j = reset.y;
-						//d = 0; 전에 탐색한 이후부터 탐색해도 상관 없음
-                 } 
-				
-				if((i == ix) && (j == iy)) { // reached exit
+				if((i == ix) && (j == iy)) {
 					break;
 				}
-			}
-			// backtracking 궤적은 1로 표시
+				
+                 } 
 			System.out.println("no path in maze");
 		}
 
