@@ -156,26 +156,25 @@ public class TrainM {
 			int d = tmp.dir;
 			mark[i][j] = 1; // backtracking 궤적은 1로 표시
 
-			while (d < 8) // moves forward
-			{
+			while (d < 8 ) // moves forward
+			{	//st.dump();
 				int g = i + moves[d].a;
 				int h = j + moves[d].b;
 				if ((maze[g][h] == 0) && (mark[g][h] == 0)) { // new position
+					mark[g][h] = 2;
 					i = g;
 					j = h;
 					st.push(new Items3(i, j, d));
 					d = 0;
-					break;
 				} else {
                	 d++;
 				}
-				
-				if((i == ix) && (j == iy)) {
+						
+				if((i == ix) && (j == iy)) { // reached exit
 					break;
 				}
-				
-                 } 
-			System.out.println("no path in maze");
+			}
+//			System.out.println("no path in maze");
 		}
 
 	}
@@ -247,7 +246,7 @@ public class TrainM {
 //		showMatrix(mark, 13, 16);
 
 		path(maze, mark, 13, 16);
-		System.out.println("mark::");
+		System.out.println("mark[13, 16]::");
 		showMatrix(mark, 13, 16);
 	}
 }
