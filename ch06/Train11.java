@@ -5,7 +5,7 @@ package ch06;
 
 import java.util.Scanner;
 
-class ch06_11 {
+class Train11 {
 //--- 정렬을 마친 배열 a, b를 병합하여 배열 c에 저장 ---//
 static void merge(int[] a, int na, int[] b, int nb, int[] c) {
    int pa = 0; //리스트 a의 인덱스

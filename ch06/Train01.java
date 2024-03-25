@@ -10,7 +10,7 @@ import java.util.Random;
 
 import java.util.Scanner;
 
-class ch06_1 {
+class Train01 {
  //--- 배열 요소 a[idx1]와 a[idx2]의 값을 교환 ---//
  static void swap(int[] a, int idx1, int idx2) {
      int t = a[idx1]; a[idx1] = a[idx2]; a[idx2] = t;

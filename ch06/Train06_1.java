@@ -7,7 +7,7 @@ import java.util.Random;
 
 import java.util.Scanner;
 
-class ch06_6_1{
+class Train06_1{
 //--- 셸 정렬 ---//
 static void shellSort(int[] a, int n) {
 	 int count = 0;

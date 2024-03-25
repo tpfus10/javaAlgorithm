@@ -139,45 +139,54 @@ public class TrainM {
 
 	public static void path(int[][] maze, int[][] mark, int ix, int iy) {
 
-		mark[1][1] = 1;
+		mark[1][1] = 2;
 		StackList st = new StackList(50);
-		Items3 temp = new Items3(0, 0, 0);// N :: 0
-		temp.x = 1;
-		temp.y = 1;
-		temp.dir = 2;// E:: 2
-		mark[temp.x][temp.y] = 2;// 미로 찾기 궤적은 2로 표시
+		Items3 temp = new Items3(1, 1, 2);// N :: 0
 		st.push(temp);
+		
+//		temp.x = 1;
+//		temp.y = 1;
+//		temp.dir = 2;// E:: 2
+//		mark[temp.x][temp.y] = 2;// 미로 찾기 궤적은 2로 표시
 
 		while (!st.isEmpty()) // stack not empty
 		{
+			// st.dump();
 			Items3 tmp = st.pop(); // unstack 팝을 한 경우 이전 값으로 돌아가는 기능을 수행
 			int i = tmp.x;
 			int j = tmp.y;
-			int d = tmp.dir;
+			int d = 0;
 			mark[i][j] = 1; // backtracking 궤적은 1로 표시
 
-			while (d < 8 ) // moves forward
-			{	//st.dump();
+			while (d < 8) // moves forward
+			{
 				int g = i + moves[d].a;
 				int h = j + moves[d].b;
+				if ((g == ix) && (h == iy)) { // reached exit
+					return;
+				}
 				if ((maze[g][h] == 0) && (mark[g][h] == 0)) { // new position
-					mark[g][h] = 2;
+					st.push(new Items3(i, j, d));
+					mark[i][j] = 2;
 					i = g;
 					j = h;
-					st.push(new Items3(i, j, d));
+					mark[g][h] = 2;
+					System.out.printf("i: %d, j: %d, d: %d", i, j, d);
+					System.out.println();
 					d = 0;
-				} else {
-               	 d++;
-				}
-						
-				if((i == ix) && (j == iy)) { // reached exit
+				} else if(d+1 >=8) {
+					mark[i][j] = 1;
 					break;
 				}
-			}
-//			System.out.println("no path in maze");
-		}
+					d++;
 
+			}
+
+		}
+//			System.out.println("no path in maze");
 	}
+
+	
 
 	static void showMatrix(int[][] d, int row, int col) {
 		for (int i = 0; i <= row; i++) {
@@ -195,33 +204,37 @@ public class TrainM {
 		int[][] mark = new int[14][17];
 
 		int input[][] = { // 12 x 15
-				{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1 }, 
-				{ 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 },
-				{ 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1 }, 
-				{ 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0 },
-				{ 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1 }, 
-				{ 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 },
-				{ 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 }, 
-				{ 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
-				{ 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 }, 
-				{ 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0 },
-				{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0 }, 
-				{ 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0 } };
+				{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 },
+				{ 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1 }, { 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0 },
+				{ 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 },
+				{ 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 }, { 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 }, { 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0 },
+				{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0 }, { 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0 } };
 
 		for (int ia = 0; ia < 8; ia++)
 			moves[ia] = new Offsets3(0, 0);// 배열에 offsets 객체를 치환해야 한다.
 
-		moves[0].a = -1; moves[0].b = 0; // N	
-		moves[1].a = -1; moves[1].b = 1; // NE
-		moves[2].a = 0;	 moves[2].b = 1; // E
-		moves[3].a = 1;	 moves[3].b = 1; // SE
-		moves[4].a = 1;	 moves[4].b = 0; // S
-		moves[5].a = 1;	 moves[5].b = -1; // SW
-		moves[6].a = 0;	 moves[6].b = -1; // W
-		moves[7].a = -1; moves[7].b = -1; // NW
+		moves[0].a = -1;
+		moves[0].b = 0; // N
+		moves[1].a = -1;
+		moves[1].b = 1; // NE
+		moves[2].a = 0;
+		moves[2].b = 1; // E
+		moves[3].a = 1;
+		moves[3].b = 1; // SE
+		moves[4].a = 1;
+		moves[4].b = 0; // S
+		moves[5].a = 1;
+		moves[5].b = -1; // SW
+		moves[6].a = 0;
+		moves[6].b = -1; // W
+		moves[7].a = -1;
+		moves[7].b = -1; // NW
 		
-		//Directions2 d;
-		//d = Directions2.N;
+		//Point[] directions = {N, NE, E, SE, S, SW, W, NW};
+
+		// Directions2 d;
+		// d = Directions2.N;
 		// d = d + 1;//java는 지원안됨
 
 		// input[][]을 maze[][]로 변환

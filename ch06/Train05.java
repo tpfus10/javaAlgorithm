@@ -8,7 +8,7 @@ import java.util.Random;
 
 import java.util.Scanner;
 
-class ch06_5 {
+class Train05 {
 //--- 단순 삽입 정렬 ---//
 static void insertionSort(int[] a, int n) {//코드를 이해하여 알고리즘을 파악한다.
 	 int count = 0;

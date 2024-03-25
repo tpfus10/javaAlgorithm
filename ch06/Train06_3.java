@@ -5,7 +5,7 @@ package ch06;
 //비교 횟수 출력한다 
 import java.util.Scanner;
 
-public class ch06_6_3 {
+public class Train06_3 {
 
 //--- 셸 정렬 ---//
 	static void shellSort(int[] a, int n) {

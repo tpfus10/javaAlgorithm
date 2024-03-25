@@ -5,7 +5,7 @@ package ch06;
 //https://tosuccess.tistory.com/124
 import java.util.Scanner;
 
-class ch06_6_2{
+class Train06_2{
 //--- 셸 정렬 ---//
 static void shellSort(int[] a, int n) {
    int h;

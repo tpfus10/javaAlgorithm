@@ -31,7 +31,7 @@ import ch04.Train2_0.IntStack3;
 //	}
 //}
 
-public class ch06_10 {
+public class Train10 {
 
 	// --- 배열 요소 a[idx1]와 a[idx2]의 값을 교환 ---//
 	static void swap(int[] a, int idx1, int idx2) {

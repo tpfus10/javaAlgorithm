@@ -1,35 +1,33 @@
-//실습6_3BubbleSort3
 package ch06;
-//버블 이동 - 교재 208, 그림 6-9
+//버블 이동 - 교재 206, 그림 6-7
 import java.util.Random;
 
-//버블 정렬(버전 3: 교환 횟수에 따른 멈춤)
+//버블 환정렬(버전 2: 교환 횟수에 따른 멈춤)
 
 import java.util.Scanner;
 
-class ch06_3 {
+class Train02{
 //--- 배열 요소 a[idx1]와 a[idx2]의 값을 교환 ---//
 static void swap(int[] a, int idx1, int idx2) {
    int t = a[idx1]; a[idx1] = a[idx2]; a[idx2] = t;
 }
 
-//--- 버블 정렬(버전 3: 스캔 범위를 한정)---//
+//--- 단순교환정렬(버전 2 : 교환 횟수에 따른 멈춤)---//
 static void bubbleSort(int[] a, int n) {
 	 int count = 0;
-   int k = 0;                               // a[k]보다 앞쪽은 정렬을 마침
-   while (k < n - 1) {
-       int last = n - 1;                    // 마지막으로 교환한 위치
-       for (int j = n - 1; j > k; j--) //정렬이 완료된 K보다 작은 인덱스는 패스X
+   for (int i = 0; i < n - 1; i++) {
+       int exchg = 0;                          // 패스에서 교환하는 횟수(교환 여부를 알려주는 태그 사용)
+       for (int j = n - 1; j > i; j--)
        {
       	 count++;
-           if (a[j - 1] > a[j]) {
+           if (a[j - 1] > a[j]) { //버블 이동하는 패스
                swap(a, j - 1, j);
-               last = j;
+               exchg++; //패스 중 교환이 일어나면 증가
            }
        }
-       k = last; //k는 마지막 교환을 한 인덱스의 위치임
+       if (exchg == 0) break;                // 교환이 이루어지지 않으면 멈춤
    }
-   System.out.println("\n비교횟수 = " + count);
+   System.out.println("\n비교 횟수 = " + count);
 }
 static void showData(int[] d) {
    for (int i = 0; i < d.length; i++)
@@ -38,11 +36,10 @@ static void showData(int[] d) {
 public static void main(String[] args) {
    Scanner stdIn = new Scanner(System.in);
 
-   System.out.println("단순교환정렬(버블정렬)");
-   System.out.print("요솟수 : ");
+   System.out.println("버블 정렬)");
+   System.out.print("요솟수: ");
    int nx = stdIn.nextInt();
    int[] x = new int[nx];
-
    Random rand = new Random();
 
    for (int i = 0; i < nx; i++) {
@@ -54,5 +51,6 @@ public static void main(String[] args) {
 
    System.out.println("정렬후:");
    showData(x);
+
 }
 }

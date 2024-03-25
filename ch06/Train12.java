@@ -1,7 +1,7 @@
 //실습6_12_1MergeSort정수
 package ch06;
 
-public class ch06_12 {
+public class Train12 {
 
 	// --- 배열 요소 a[idx1]와 a[idx2]의 값을 교환 ---//
 	static void merge(int[] a, int lefta, int righta, int leftb, int rightb ) {
