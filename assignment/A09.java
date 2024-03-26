@@ -1,84 +1,265 @@
-//Test_객체merge정렬 : 정수 버전을 객체 버전으로 바꾸기
+//Test_MazingProblem_미로찾기
 package assignment;
 
-/*
- * 6장 구현 실습과제1 
- */
+import java.util.ArrayList;
+import java.util.List;
 
-class PhyscData implements Comparable<PhyscData>{
-    String name;              // 이름
-    int    height;            // 키
-    double vision;            // 시력
-	
-	public PhyscData(String name, int height, double vision) {
-		this.name = name;
-		this.height = height;
-		this.vision = vision;
+enum Directions2 {
+	N, NE, E, SE, S, SW, W, NW
+}
+
+class Items3 {
+	int x;
+	int y;
+	int dir;
+
+	public Items3(int x, int y, int d) {
+		this.x = x;
+		this.y = y;
+		this.dir = d;
 	}
 
 	@Override
-	public int compareTo(PhyscData o) {
-		if(name.compareTo(o.name) > 0) return 1;
-		else if(name.compareTo(o.name) < 0) return -1;
-		else return 0;
+	public String toString() {
+		return "x = " + x + ", y = " + y + ", dir = " + dir;
+	}
+}
+
+class Offsets3 {
+	int a;
+	int b;
+
+	public Offsets3(int a, int b) {
+		this.a = a;
+		this.b = b;
+	}
+}
+
+class StackList {
+	private List<Items3> data; // 스택용 배열
+	private int capacity; // 스택의 크기
+	private int top; // 스택 포인터
+
+	// --- 실행시 예외 : 스택이 비어있음 ---//
+	public class EmptyIntStackException extends RuntimeException {
+		public EmptyIntStackException(String message) {
+			super(message);
+		}
 	}
 
+	// --- 실행시 예외 : 스택이 가득 참 ---//
+	public class OverflowIntStackException extends RuntimeException {
+		public OverflowIntStackException(String message) {
+			super(message);
+		}
+	}
 
+	// --- 생성자(constructor) ---//
+	public StackList(int maxlen) {
+		top = 0;
+		capacity = maxlen;
+		try {
+			data = new ArrayList<>(0); // 스택 본체용 배열을 생성
+		} catch (OutOfMemoryError e) { // 생성할 수 없음
+			capacity = 0;
+		}
+	}
 
+	// --- 스택에 x를 푸시 ---//
+	public void push(Items3 p) throws OverflowIntStackException {
+		if (top >= capacity) // 스택이 가득 참
+			throw new OverflowIntStackException("push: stack overflow");
+		data.add(p);
+		top++;
+	}
+
+	// --- 스택에서 데이터를 팝(정상에 있는 데이터를 꺼냄) ---//
+	public Items3 pop() throws EmptyIntStackException {
+		if (top <= 0) // 스택이 빔
+			throw new EmptyIntStackException("pop: stack empty");
+		return data.remove(--top);
+	}
+
+	// --- 스택에서 데이터를 피크(peek, 정상에 있는 데이터를 들여다봄) ---//
+	public Items3 peek() throws EmptyIntStackException {
+//		System.out.println("피크");
+		if (top <= 0) // 스택이 빔
+			throw new EmptyIntStackException("peek: stack empty");
+		return data.get(top - 1);
+	}
+
+	// --- 스택을 비움 ---//
+	public void clear() {
+		top = 0;
+	}
+
+	// --- 스택에서 x를 찾아 인덱스(벌견하지 못하면 –1)를 반환 ---//
+	public int indexOf(Items3 x) {
+		for (int i = top - 1; i >= 0; i--) // 정상 쪽에서 선형검색
+			if (data.get(i).equals(x))
+				return i; // 검색 성공
+		return -1; // 검색 실패
+	}
+
+	// --- 스택의 크기를 반환 ---//
+	public int getCapacity() {
+		return capacity;
+	}
+
+	// --- 스택에 쌓여있는 데이터 갯수를 반환 ---//
+	public int size() {
+		return top;
+	}
+
+	// --- 스택이 비어있는가? ---//
+	public boolean isEmpty() {
+		return top <= 0;
+	}
+
+	// --- 스택이 가득 찼는가? ---//
+	public boolean isFull() {
+		return top >= capacity;
+	}
+
+	// --- 스택 안의 모든 데이터를 바닥 → 정상 순서로 표시 ---//
+	public void dump() {
+		if (top <= 0)
+			System.out.println("스택이 비어있습니다.");
+		else {
+			for (int i = 0; i < top; i++)
+				System.out.print(data.get(i) + " ");
+			System.out.println();
+		}
+	}
 }
+
 public class A09 {
-	// --- 배열 요소 a[idx1]와 a[idx2]의 값을 교환 ---//
-	static void merge(PhyscData[] a, int lefta, int righta, int leftb, int rightb ) {
-		PhyscData temp [] = new PhyscData[30];
-		int ix=0;
-		int p = lefta, q =leftb;
-		while(p <= righta && q <rightb) {
-			if(a[p].compareTo(a[q]) < 0) temp[ix++] = a[p++];
-			else if (a[p].compareTo(a[q]) > 0) temp[ix++] = a[q++];
-			else {
-				temp[ix++] = a[p++]; temp[ix++] = a[q++]; //같은 건 두 번 넣어주기
+
+	static Offsets3[] moves = new Offsets3[8];// static을 선언하는 이유를 알아야 한다
+
+	public static void path(int[][] maze, int[][] mark, int ix, int iy) {
+
+		mark[1][1] = 2;
+		StackList st = new StackList(50);
+		Items3 temp = new Items3(1, 1, 2);// N :: 0
+		st.push(temp);
+		
+//		temp.x = 1;
+//		temp.y = 1;
+//		temp.dir = 2;// E:: 2
+//		mark[temp.x][temp.y] = 2;// 미로 찾기 궤적은 2로 표시
+
+		while (!st.isEmpty()) // stack not empty
+		{
+			// st.dump();
+			Items3 tmp = st.pop(); // unstack 팝을 한 경우 이전 값으로 돌아가는 기능을 수행
+			int i = tmp.x;
+			int j = tmp.y;
+			int d = 0;
+			mark[i][j] = 1; // backtracking 궤적은 1로 표시
+
+			while (d < 8) // moves forward
+			{
+				int g = i + moves[d].a;
+				int h = j + moves[d].b;
+				if ((g == ix) && (h == iy)) { // reached exit
+					return;
+				}
+				if ((maze[g][h] == 0) && (mark[g][h] == 0)) { // new position
+					st.push(new Items3(i, j, d));
+					mark[i][j] = 2;
+					i = g;
+					j = h;
+					mark[g][h] = 2;
+					System.out.printf("i: %d, j: %d, d: %d", i, j, d);
+					System.out.println();
+					d = 0;
+				} else if(d+1 >=8) {
+					mark[i][j] = 1;
+					break;
+				}
+					d++;
+
+			}
+
+		}
+//			System.out.println("no path in maze");
+	}
+
+	
+
+	static void showMatrix(int[][] d, int row, int col) {
+		for (int i = 0; i <= row; i++) {
+			for (int j = 0; j <= col; j++) {
+				System.out.print(d[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
+
+//----------------------------------------------------------------------------------------------------------main
+
+	public static void main(String[] args) {
+		int[][] maze = new int[14][17];
+		int[][] mark = new int[14][17];
+
+		int input[][] = { // 12 x 15
+				{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1 },
+				{ 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1 }, { 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0 },
+				{ 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1 }, { 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 },
+				{ 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1 }, { 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1 },
+				{ 0, 0, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1 }, { 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0 },
+				{ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0 }, { 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0 } };
+
+		for (int ia = 0; ia < 8; ia++)
+			moves[ia] = new Offsets3(0, 0);// 배열에 offsets 객체를 치환해야 한다.
+
+		moves[0].a = -1;
+		moves[0].b = 0; // N
+		moves[1].a = -1;
+		moves[1].b = 1; // NE
+		moves[2].a = 0;
+		moves[2].b = 1; // E
+		moves[3].a = 1;
+		moves[3].b = 1; // SE
+		moves[4].a = 1;
+		moves[4].b = 0; // S
+		moves[5].a = 1;
+		moves[5].b = -1; // SW
+		moves[6].a = 0;
+		moves[6].b = -1; // W
+		moves[7].a = -1;
+		moves[7].b = -1; // NW
+		
+		//Point[] directions = {N, NE, E, SE, S, SW, W, NW};
+
+		// Directions2 d;
+		// d = Directions2.N;
+		// d = d + 1;//java는 지원안됨
+
+		// input[][]을 maze[][]로 변환
+		for (int i = 0; i < 14; i++) {
+			for (int j = 0; j < 17; j++) {
+				maze[i][0] = 1;
+				maze[i][16] = 1;
+				maze[0][j] = 1;
+				maze[13][j] = 1;
 			}
 		}
-		while (p > righta && q <= rightb) temp[ix++] = a[q++];
-		while (q > rightb && p <= righta) temp[ix++] = a[p++];
-		System.out.println();
-		for(int j = 0; j < ix; j++) {//배열 a에 temp값 옮기기
-			a[lefta + j] =temp[j];
-			System.out.println(" " + a[lefta + j]);
+		for (int i = 0; i < 12; i++) {
+			for (int j = 0; j < 15; j++) {
+				maze[i + 1][j + 1] = input[i][j];
+			}
 		}
-		System.out.println();
-	}
 
-	// --- 퀵 정렬(비재귀 버전)---//
-	static void MergeSort(PhyscData[] a, int left, int right) {
-		int mid = (left+right)/2;
-		if (left == right) return;
-		MergeSort(a, left, mid); //mergesort메소드
-		MergeSort(a, mid+1, right);
-		merge(a, left, mid, mid+1, right); //merge메소드
-		return;
-	}
+		System.out.println("maze[13,16]::");
+		showMatrix(maze, 13, 16);
 
-//------------------------------------------------------main
-	
-	public static void main(String[] args) {
-		PhyscData[] x = {
-		         new PhyscData("강민하", 162, 0.3),
-		         new PhyscData("김찬우", 173, 0.7),
-		         new PhyscData("박준서", 171, 2.0),
-		         new PhyscData("유서범", 171, 1.5),
-		         new PhyscData("이수연", 168, 0.4),
-		         new PhyscData("장경오", 171, 1.2),
-		         new PhyscData("황지안", 169, 0.8),
-		     };
-		int nx = x.length;
+//		System.out.println("mark::");
+//		showMatrix(mark, 13, 16);
 
-		   MergeSort(x, 0, nx - 1); // 배열 x를 퀵정렬->여기에서 시작
-			System.out.println("오름차순으로 정렬했습니다.");
-		     System.out.println("■ 신체검사 리스트 ■");
-		     System.out.println(" 이름     키  시력");
-		     System.out.println("------------------");
-		     for (int i = 0; i < x.length; i++)
-		         System.out.printf("%-8s%3d%5.1f\n", x[i].name, x[i].height, x[i].vision);
+		path(maze, mark, 13, 16);
+		System.out.println("mark[13, 16]::");
+		showMatrix(mark, 13, 16);
 	}
 }
