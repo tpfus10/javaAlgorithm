@@ -23,7 +23,8 @@ class LinkedList1 {
 		first = null;
 	}
 
-	public void Add(int element) // 임의 값을 삽입할 때 리스트가 오름차순으로 정렬이 되도록 한다
+	public void Add(int element) 
+	// 임의 값을 삽입할 때 리스트가 오름차순으로 정렬이 되도록 한다
 	{
 		Node1 newNode = new Node1(element);
 		
@@ -40,6 +41,7 @@ class LinkedList1 {
 				if(element > p.data) { //p가 element보다 커질 때까지 이동하기(오름차순 정렬)
 					q = p;
 					p = p.link;
+					
 				} else {
 					if(q == null) { //2-1) 리스트의 맨 처음에 값을 입력할 때(first 써줘야 함)
 						first = newNode;
@@ -94,7 +96,8 @@ class LinkedList1 {
 	}
 
 
-	public boolean Search(int data) { //전달된 data 값을 찾아 존재하면 true로 리턴, 없으면 false로 리턴
+	public boolean Search(int data) { 
+		//전달된 data 값을 찾아 존재하면 true로 리턴, 없으면 false로 리턴
 		Node1 ptr = first;
 
 		while(ptr != null) {

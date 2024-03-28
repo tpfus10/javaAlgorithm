@@ -1,7 +1,6 @@
  //실습9_2객체연결리스트_test
 
 package assignment;
-
 /*
  * 정수 리스트 > 객체 리스트: 2번째 실습 대상
  */
@@ -82,34 +81,20 @@ class LinkedList2 {
 		first = null;
 	}
 
-	public int Delete(SimpleObject element, Comparator<SimpleObject> cc)
-	// 삭제하려고 전달된 element를 찾을 때 comparator 객체를 사용한다
-	{
-		Node2 q, current = first;
-		q = current;
-
-		return -1;// 삭제할 대상이 없다.
-	}
-
-	public void Show() { // 전체 리스트를 순서대로 출력한다.
-		Node2 p = first;
-		SimpleObject so;
-
-	}
-
 	public void Add(SimpleObject element, Comparator<SimpleObject> cc)
 	// 임의 값을 삽입할 때 리스트가 오름차순으로 정렬이 되도록 한다
 	{
 		Node2 newNode = new Node2(element);
+		
 		if (first == null) // 1)빈 리스트에 값을 넣을 때
 		{
-			newNode.link = first;
 			first = newNode;
 			return;
 		}
 		else { //2)값이 있는 리스트에 값을 넣을 때
 			Node2 p = first;
 			Node2 q = null;
+			
 			while(p != null) {
 				if(cc.compare(element, p.data) > 0) { //p가 newNode보다 커질 때까지 p를 이동
 					q = p; //p가 이동하기 전의 값을 저장
@@ -119,10 +104,11 @@ class LinkedList2 {
 					if(q == null) { //2-1)삽입하는 값이 맨 앞에 들어갈 때
 						first = newNode;
 						newNode.link = p;
+						return;
 					} else { //2-2)삽입하는 값이 중간에 들어갈 때
 						q.link = newNode;
 						newNode.link = p;
-						
+						return;
 					}
 				}
 			}
@@ -130,14 +116,55 @@ class LinkedList2 {
 			q.link = newNode;
 			
 		}
-
+		
+	}
+	
+	public int Delete(SimpleObject element, Comparator<SimpleObject> cc)
+	// 삭제하려고 전달된 element를 찾을 때 comparator 객체를 사용한다
+	{
+		Node2 q = null;
+		Node2 current = first;
+		
+		while(current != null) {
+			if(cc.compare(element, current.data) == 0) {
+				if(q == null) { //1)삭제할 노드가 첫 번째 노드인 경우
+					first = current.link; //first값을 바꿔줌
+					current = null;
+				} else if(current.link == null) {
+					 current = null;
+				} else {
+					q.link = current.link;
+					current = null;
+				}
+				return 1;
+			}
+			q = current;
+			current = current.link;
+		}
+		return -1;// 삭제할 대상이 없다.
 	}
 
-	public boolean Search(SimpleObject element, Comparator<SimpleObject> cc) {
-		// 전체 리스트를 올림차순 순서대로 출력한다.
-		Node2 q, current = first;
-		q = current;
+	public void Show() { // 전체 리스트를 순서대로 출력한다.
+		Node2 p = first;
+		SimpleObject so;
+		while(p != null) {
+			System.out.println(p.data + " ");
+			p = p.link;
+		}
+		System.out.println();
+	}
 
+
+	public boolean Search(SimpleObject element, Comparator<SimpleObject> cc) {
+		//전달된 data 값을 찾아 존재하면 true로 리턴, 없으면 false로 리턴
+		Node2 ptr = first;
+		
+		while(ptr != null) {
+			if(cc.compare(ptr.data, element) == 0) {
+				return true;
+			}
+			ptr = ptr.link;
+		}
 		return false;
 	}
 

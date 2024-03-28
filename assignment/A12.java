@@ -40,11 +40,12 @@ class Heap implements MaxHeap {
 		n++;
 		for (i = n; i > 1; i = i / 2) { //루트까지 부모 노드와의 비교를 반복
 			//heap[i / 2]: 부모 노드
-			if (x <= heap[i / 2])
-				break;
-			heap[i] = heap[i/2];
+			if (x <= heap[i/2]) //삽입하는 값이 부모 노드보다 작거나 같을 때 
+				break; //for문을 중지하고 break
+			heap[i] = heap[i/2]; //삽입하는 값이 부모 노드보다 클 때 자식의 노드에 부모 노드 데이터 저장, if문에서 break가 되거나 for문이 끝날 때까지 반복
 		}
-		heap[i] = x; //break 후에 오는 곳
+		heap[i] = x; //for문을 돌면서 i는 값을 바꾸기로 한 부모 노드의 인덱스가 됨(break 후에 오는 곳)
+					 //또는 새로운 값을 노드의 끝에 저장
 
 	}
 
