@@ -120,8 +120,8 @@ class CircularList {
 				q = p;
 				p = p.link;
 			} else {
-				if (p == first) {// 1-1)삽입하는 값이 헤드에 붙을 때(첫 번째 문제)
-					q.link = newNode; //(두 번째 문제)
+				if (p == first) {// 1-1)삽입하는 값이 헤드에 앞에 붙을 때(첫 번째 문제)
+					p.link = newNode; //(두 번째 문제)
 					newNode.link = first;
 					return;
 				} else {// 1-2)삽입하는 값이 중간에 들어갈 때/헤드 뒤에 붙을 때
@@ -132,7 +132,7 @@ class CircularList {
 			}
 		}
 		//2)원형리스트가 비어있을 때
-		q.link = newNode;
+		p = newNode;
 		newNode.link = first;
 
 	}
