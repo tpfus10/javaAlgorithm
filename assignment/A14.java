@@ -13,24 +13,35 @@ import java.util.Scanner;
 class SimpleObject3 {
 	static final int NO = 1; // 번호를 읽어 들일까요?
 	static final int NAME = 2; // 이름을 읽어 들일까요?
+	static final int EXPIRE = 3; // 유효기간을 읽어 들일까요?
 
 	private String no; // 회원번호
 	private String name; // 이름
-	String expire;// 유효기간 필드를 추가
+	private String expire;// 유효기간 필드를 추가
 	// --- 문자열 표현을 반환 ---//
 
 	public String toString() {
-		return "(" + no + ") " + name;
+		return "(" + no + ") " + "이름: " + name + " 유효기간: " + expire;
 	}
 
-	public SimpleObject3(String no, String name) {
+	public SimpleObject3(String no, String name, String expire) {
 		this.no = no;
 		this.name = name;
+		this.expire = expire;
 	}
 
 	public SimpleObject3() {// head node를 만들 때 사용
 		this.no = null;
 		this.name = null;
+		this.expire = null;
+	}
+
+	public String getNo() {
+		return no;
+	}
+
+	public void setNo(String no) {
+		this.no = no;
 	}
 
 	// --- 데이터를 읽어 들임 ---//
@@ -45,6 +56,10 @@ class SimpleObject3 {
 		if ((sw & NAME) == NAME) {
 			System.out.print("이름: ");
 			name = sc.next();
+		}
+		if ((sw & EXPIRE) == EXPIRE) {
+			System.out.print("유효기간: ");
+			expire = sc.next();
 		}
 	}
 
@@ -75,6 +90,11 @@ class Node3 {
 		data = element;
 		link = null;
 	}
+
+	public void setData(SimpleObject3 data) {
+		this.data = data;
+	}
+
 }
 
 class CircularList {
@@ -93,16 +113,34 @@ class CircularList {
 	 */
 	public int Delete(SimpleObject3 element, Comparator<SimpleObject3> cc) // delete the element
 	{
-		Node3 q, current = first.link;
+		Node3 delNode = new Node3(element);
+		Node3 q = first;
+		Node3 current = first.link;
+
 		q = current;
+		while (q.link != first) {
+			if (cc.compare(delNode.data, current.data) == 0) {
+				if (current.link == first) {
+					q.link = first;
+					current = null;
+				} else {
+					q.link = current.link;
+					current = null;
+				}
+
+				return 1;
+			}
+			q = current;
+			current = current.link;
+		}
 
 		return -1;// 삭제할 대상이 없다.
 	}
 
 	public void Show() { // 전체 리스트를 순서대로 출력한다.
 		Node3 p = first.link;
-		SimpleObject3 so;
-		while(p != first) {
+		while (p != first) {
+//		SimpleObject3 so = p.data;
 			System.out.println(p.data + " ");
 			p = p.link;
 		}
@@ -115,26 +153,23 @@ class CircularList {
 		Node3 p = first.link;
 		Node3 q = first;
 
-		while (p != first) { //1)원형리스트가 비어있지(헤드노드만 있지) 않을 때
-			if (cc.compare(element, p.data) > 0) { 
+		// 1)원형리스트가 비어있지(헤드노드만 있지) 않을 때
+		while (q.link != first) { // p.link라고 하면 first가 아닌 다음값을 가리켜서 while문이 실행되지 않음
+			if (cc.compare(element, p.data) > 0 || p.data != null) { // q가 null이면 비교가 안 됨
 				q = p;
 				p = p.link;
-			} else {
-				if (p == first) {// 1-1)삽입하는 값이 헤드에 앞에 붙을 때(첫 번째 문제)
-					p.link = newNode; //(두 번째 문제)
+			} else { // 헤드 뒤에 값을 넣거나 중간에 값을 넣을 때
+				if (p == first) {
+					p.link = newNode;
 					newNode.link = first;
 					return;
-				} else {// 1-2)삽입하는 값이 중간에 들어갈 때/헤드 뒤에 붙을 때
+				} else {
 					q.link = newNode;
 					newNode.link = p;
 					return;
 				}
 			}
 		}
-		//2)원형리스트가 비어있을 때
-		p = newNode;
-		newNode.link = first;
-
 	}
 
 	public boolean Search(SimpleObject3 element, Comparator<SimpleObject3> cc) { // 전체 리스트를 순서대로 출력한다.
@@ -143,7 +178,7 @@ class CircularList {
 		return false;
 	}
 
-	void Merge(LinkedList2 b) {
+	void Merge(CircularList b) {
 		/*
 		 * 연결리스트 a,b에 대하여 a = a + b merge하는 알고리즘 구현으로 in-place 방식으로 합병/이것은 새로운 노드를 만들지
 		 * 않고 합병하는 알고리즘 구현 난이도 등급: 최상급 회원번호에 대하여 a = (3, 5, 7), b = (2,4,8,9)이면 a =
