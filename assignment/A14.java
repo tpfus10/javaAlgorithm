@@ -154,23 +154,20 @@ class CircularList {
 		Node3 q = first;
 
 		// 1)원형리스트가 비어있지(헤드노드만 있지) 않을 때
-		while (q.link != first) { // p.link라고 하면 first가 아닌 다음값을 가리켜서 while문이 실행되지 않음
-			if (cc.compare(element, p.data) > 0 || p.data != null) { // q가 null이면 비교가 안 됨
+		while (p != first) { // p.link라고 하면 first가 아닌 다음값을 가리켜서 while문이 실행되지 않음
+			if (cc.compare(element, p.data) > 0) { // q가 null이면 비교가 안 됨
 				q = p;
 				p = p.link;
 			} else { // 헤드 뒤에 값을 넣거나 중간에 값을 넣을 때
-				if (p == first) {
-					p.link = newNode;
-					newNode.link = first;
-					return;
-				} else {
 					q.link = newNode;
 					newNode.link = p;
 					return;
 				}
 			}
+			p.link = newNode;
+			newNode.link = first;
 		}
-	}
+	
 
 	public boolean Search(SimpleObject3 element, Comparator<SimpleObject3> cc) { // 전체 리스트를 순서대로 출력한다.
 		Node3 q, current = first.link;
