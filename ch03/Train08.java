@@ -39,7 +39,7 @@ class CompHeight implements Comparator<PhyscData3> { //p125 2번
 	public int compare(PhyscData3 o1, PhyscData3 o2) {
 		if(o1.height > o2.height) return 1;
 		else if (o1.height < o2.height) return -1;
-		else return 0;
+		return 0;
 	}
 
 }
