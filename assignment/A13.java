@@ -125,22 +125,21 @@ class LinkedList2 {
 		Node2 q = null;
 		Node2 current = first;
 		
-		while(current != null) {
-			if(cc.compare(element, current.data) == 0) {
-				if(q == null) { //1)삭제할 노드가 첫 번째 노드인 경우
-					first = current.link; //first값을 바꿔줌
-					current = null;
-				} else if(current.link == null) {
-					 current = null;
-				} else {
-					q.link = current.link;
-					current = null;
+		// 헤드 노드가 삭제되어야 하는 경우
+				if (current != null && cc.compare(element, current.data) == 0) {
+					first = current.link;
+					return 1;
 				}
-				return 1;
-			}
-			q = current;
-			current = current.link;
-		}
+
+				// k 값을 가진 노드를 찾아 삭제
+				while (current != null) {
+					if (cc.compare(element, current.data) == 0) {
+						q.link = current.link;
+						return 1;
+					}
+					q = current;
+					current = current.link;
+				}
 		return -1;// 삭제할 대상이 없다.
 	}
 
