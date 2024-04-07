@@ -29,19 +29,11 @@ class SimpleObject3 {
 		this.name = name;
 		this.expire = expire;
 	}
-
-	public SimpleObject3() {// head node를 만들 때 사용
+	
+	public SimpleObject3() {//head 노드를 만들 때 사용
 		this.no = null;
 		this.name = null;
 		this.expire = null;
-	}
-
-	public String getNo() {
-		return no;
-	}
-
-	public void setNo(String no) {
-		this.no = no;
 	}
 
 	// --- 데이터를 읽어 들임 ---//
@@ -91,10 +83,6 @@ class Node3 {
 		link = null;
 	}
 
-	public void setData(SimpleObject3 data) {
-		this.data = data;
-	}
-
 }
 
 class CircularList {
@@ -113,25 +101,20 @@ class CircularList {
 	 */
 	public int Delete(SimpleObject3 element, Comparator<SimpleObject3> cc) // delete the element
 	{
-		Node3 delNode = new Node3(element);
 		Node3 q = first;
 		Node3 current = first.link;
 
-		q = current;
-		while (q.link != first) {
-			if (cc.compare(delNode.data, current.data) == 0) {
-				if (current.link == first) {
-					q.link = first;
-					current = null;
+		while (current != first) {
+			if (cc.compare(current.data, element) < 0) {
+					q = current;
+					current = current.link;
 				} else {
+					if (cc.compare(current.data, element) == 0) {
 					q.link = current.link;
-					current = null;
+					return 1;
 				}
-
-				return 1;
+					break;
 			}
-			q = current;
-			current = current.link;
 		}
 
 		return -1;// 삭제할 대상이 없다.
@@ -139,6 +122,7 @@ class CircularList {
 
 	public void Show() { // 전체 리스트를 순서대로 출력한다.
 		Node3 p = first.link;
+		
 		while (p != first) {
 //		SimpleObject3 so = p.data;
 			System.out.println(p.data + " ");
@@ -164,13 +148,20 @@ class CircularList {
 					return;
 				}
 			}
-			p.link = newNode;
+			q.link = newNode;
 			newNode.link = first;
 		}
 	
 
 	public boolean Search(SimpleObject3 element, Comparator<SimpleObject3> cc) { // 전체 리스트를 순서대로 출력한다.
-		Node3 q, current = first.link;
+		Node3 p = first.link;
+		
+		while(p != first) {
+			if(cc.compare(p.data, element) == 0) {
+				return true;
+			}
+			p = p.link;
+		}
 
 		return false;
 	}
